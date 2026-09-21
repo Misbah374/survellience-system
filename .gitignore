@@ -1,0 +1,28 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# Python Caches & Artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Environment Variables & Secrets
+.env
+.env.local
+*.env
+
+# Node / Frontend Build & Dependencies
+node_modules/
+dist/
+build/
+.next/
+
+# IDE & OS Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Surveillance System</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app">
+
+        <!-- ================= HEADER ================= -->
+        <header class="topbar">
+
+            <div>
+                <h1>Smart Surveillance System</h1>
+                <p>AI-Based Emergency Detection & Response</p>
+            </div>
+
+        </header>
+
+        <!-- ================= MAIN DASHBOARD ================= -->
+        <main class="dashboard">
+
+            <!-- ================= CAMERA SECTION ================= -->
+            <section class="camera-section">
+
+                <!-- Camera display -->
+                <div class="video-container">
+
+                    <!-- Shown when camera is OFF -->
+                    <div id="videoPlaceholder"
+                         class="video-placeholder">
+
+                        <div class="camera-icon">◉</div>
+
+                        <h3>Camera is not running</h3>
+
+                        <p>
+                            Start the camera to begin surveillance.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Flask video stream -->
+                    <img id="videoStream" class="video-stream hidden" src="" alt="Live surveillance feed">
+
+                </div>
+                <!-- Camera controls -->
+                <div class="camera-controls">
+
+                    <button id="startBtn"
+                            class="btn btn-primary">
+                        Start Camera
+                    </button>
+
+                    <button id="stopBtn"
+                            class="btn btn-danger"
+                            disabled>
+                        Stop Camera
+                    </button>
+
+                </div>
+
+            </section>
+            <!-- ================= SIDE PANEL ================= -->
+            <aside class="side-panel">
+
+                <!-- ========== DETECTION STATUS ========== -->
+                <div class="panel-card">
+
+                    <div class="panel-title">
+
+                        <h2>Detection Status</h2>
+                        <span id="detectionIndicator" class="indicator normal">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </main>
+
+    </div>
+    <!-- ================= JAVASCRIPT ================= -->
+    <script src="script.js"></script>
+</body>
+</html>
