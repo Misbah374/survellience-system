@@ -1,5 +1,5 @@
-from flask import Blueprint, send_from_directory, Response
-from controllers import start_camera, stop_camera, generate_frames
+from flask import Blueprint, jsonify, send_from_directory, Response
+from controllers import get_detection, start_camera, stop_camera, generate_frames
 
 routes = Blueprint("routes", __name__)
 
@@ -31,3 +31,8 @@ def video_feed():
         generate_frames(),
         mimetype="multipart/x-mixed-replace; boundary=frame"
     )
+
+
+@routes.route("/detection")
+def detection():
+    return jsonify(get_detection())

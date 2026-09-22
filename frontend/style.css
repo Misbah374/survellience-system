@@ -175,6 +175,19 @@ body {
     background-color: #22c55e;
 }
 
+.indicator.alert {
+    background-color: #dc2626;
+}
+
+.detection-details {
+    margin-top: 18px;
+    line-height: 1.9;
+}
+
+.detection-event {
+    margin-bottom: 8px;
+}
+
 
 /* ================= RESPONSIVE ================= */
 

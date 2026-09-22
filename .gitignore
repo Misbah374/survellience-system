@@ -26,3 +26,8 @@ build/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Dataset images
+ml/datasets/**/*.png
+ml/datasets/**/*.jpg
+ml/datasets/**/*.jpeg
