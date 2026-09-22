@@ -9,7 +9,7 @@ from ml.detection import load_models, predict_rgb_array
 
 camera = None
 latest_frame = None
-latest_detection = {"fire": 0, "violence": 0, "accident": 0, "event": "normal"}
+latest_detection = {"normal": 0, "fire": 0, "accident": 0, "violence": 0, "event": "normal"}
 last_detection_time = 0.0
 model_cache = None
 camera_lock = threading.Lock()
@@ -17,7 +17,7 @@ detection_lock = threading.Lock()
 
 
 def _normal_detection():
-    return {"fire": 0, "violence": 0, "accident": 0, "event": "normal"}
+    return {"normal": 0, "fire": 0, "accident": 0, "violence": 0, "event": "normal"}
 
 
 def start_camera():
@@ -96,12 +96,7 @@ def get_detection():
         if model_cache is None:
             model_cache = load_models()
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        result = predict_rgb_array(rgb_frame, model_cache)
-        latest_detection = {
-            name: result[name]["probability"]
-            for name in ("fire", "violence", "accident")
-        }
-        latest_detection["event"] = result["event"]
+        latest_detection = predict_rgb_array(rgb_frame, model_cache)
     except Exception as error:
         print("Detection error:", error)
     finally:

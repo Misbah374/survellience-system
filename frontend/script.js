@@ -3,6 +3,7 @@ const stopBtn = document.getElementById("stopBtn");
 const detectionIndicator = document.getElementById("detectionIndicator");
 const currentEvent = document.getElementById("currentEvent");
 const detectionFields = {
+    normal: document.getElementById("normalProbability"),
     fire: document.getElementById("fireProbability"),
     violence: document.getElementById("violenceProbability"),
     accident: document.getElementById("accidentProbability")

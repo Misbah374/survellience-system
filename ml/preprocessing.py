@@ -6,6 +6,12 @@ from PIL import Image, UnidentifiedImageError
 
 IMAGE_SIZE = (128, 128)
 SUPPORTED_EXTENSIONS = {".jpg", ".jpeg", ".png"}
+CLASS_LABELS = {
+	"normal": 0,
+	"fire": 1,
+	"accident": 2,
+	"violence": 3,
+}
 
 
 def load_and_preprocess_image(image_path, image_size=IMAGE_SIZE):
@@ -23,33 +29,22 @@ def preprocess_image_array(image, image_size=IMAGE_SIZE):
 	return np.asarray(image, dtype=np.float32) / 255.0
 
 
-def _find_split_folder(dataset_path, split_names):
-	for split_name in split_names:
-		folder = dataset_path / split_name
-		if folder.is_dir():
-			return folder
-	return None
-
-
 def load_dataset(dataset_path, image_size=IMAGE_SIZE, report=True):
-	"""Load positive and negative images from a dataset directory.
+	"""Load the four class folders from a dataset directory.
 
 	Returns:
 		X: Float32 image arrays with shape (n, height, width, 3).
-		y: Integer labels where positive is 1 and negative is 0.
+		y: Integer class labels for normal, fire, accident, and violence.
 	"""
 	dataset_path = Path(dataset_path)
-	split_folders = {
-		1: _find_split_folder(dataset_path, ("positive", "positives")),
-		0: _find_split_folder(dataset_path, ("negative", "negatives")),
-	}
 	images = []
 	labels = []
 	skipped = 0
-	loaded_counts = {1: 0, 0: 0}
+	loaded_counts = {class_name: 0 for class_name in CLASS_LABELS}
 
-	for label, folder in split_folders.items():
-		if folder is None:
+	for class_name, label in CLASS_LABELS.items():
+		folder = dataset_path / class_name
+		if not folder.is_dir():
 			continue
 		for image_path in sorted(folder.iterdir()):
 			if not image_path.is_file() or image_path.suffix.lower() not in SUPPORTED_EXTENSIONS:
@@ -58,7 +53,7 @@ def load_dataset(dataset_path, image_size=IMAGE_SIZE, report=True):
 			try:
 				images.append(load_and_preprocess_image(image_path, image_size))
 				labels.append(label)
-				loaded_counts[label] += 1
+				loaded_counts[class_name] += 1
 			except (OSError, UnidentifiedImageError, ValueError):
 				skipped += 1
 
@@ -67,14 +62,9 @@ def load_dataset(dataset_path, image_size=IMAGE_SIZE, report=True):
 	y = np.asarray(labels, dtype=np.int64)
 
 	if report:
-		label_distribution = {
-			int(label): int(count)
-			for label, count in zip(*np.unique(y, return_counts=True))
-		}
-		print(f"positive images: {loaded_counts[1]}")
-		print(f"negative images: {loaded_counts[0]}")
+		print(f"class counts: {loaded_counts}")
 		print(f"image shape: {X.shape[1:]}")
-		print(f"label distribution: {label_distribution}")
+		print(f"label distribution: {dict(zip(*np.unique(y, return_counts=True)))}")
 		print(f"skipped files: {skipped}")
 
 	return X, y
