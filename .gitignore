@@ -31,3 +31,4 @@ Thumbs.db
 ml/datasets/**/*.png
 ml/datasets/**/*.jpg
 ml/datasets/**/*.jpeg
+test_images/

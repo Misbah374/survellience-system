@@ -1,46 +1,56 @@
 const startBtn = document.getElementById("startBtn");
 const stopBtn = document.getElementById("stopBtn");
 const detectionIndicator = document.getElementById("detectionIndicator");
-const currentEvent = document.getElementById("currentEvent");
-const detectionFields = {
-    normal: document.getElementById("normalProbability"),
-    fire: document.getElementById("fireProbability"),
-    violence: document.getElementById("violenceProbability"),
-    accident: document.getElementById("accidentProbability")
+const multiclassFields = {
+    normal: document.getElementById("multiclassNormalProbability"),
+    fire: document.getElementById("multiclassFireProbability"),
+    accident: document.getElementById("multiclassAccidentProbability"),
+    violence: document.getElementById("multiclassViolenceProbability")
 };
-const emergencyMessage = document.createElement("p");
-emergencyMessage.className = "emergency-response";
-emergencyMessage.textContent = "No emergency detected";
-currentEvent.parentElement.appendChild(emergencyMessage);
+const binaryFields = {
+    fire: document.getElementById("binaryFireProbability"),
+    violence: document.getElementById("binaryViolenceProbability"),
+    accident: document.getElementById("binaryAccidentProbability")
+};
+const binaryEvent = document.getElementById("binaryEvent");
+const multiclassEvent = document.getElementById("multiclassEvent");
+const comparisonMulticlassEvent = document.getElementById("comparisonMulticlassEvent");
+const comparisonBinaryEvent = document.getElementById("comparisonBinaryEvent");
+const comparisonAgreement = document.getElementById("comparisonAgreement");
 let detectionTimer = null;
 
-function updateEmergencyMessage(event) {
-    const messages = {
-        fire: "Calling Fire Department...",
-        violence: "Calling Police...",
-        accident: "Calling Emergency Medical Services...",
-        normal: "No emergency detected"
-    };
-    emergencyMessage.textContent = messages[event] || messages.normal;
+function formatPercentage(probability) {
+    return `${(probability * 100).toFixed(2)}%`;
 }
 
 function resetDetection() {
-    currentEvent.textContent = "NORMAL";
     detectionIndicator.className = "indicator normal";
-    Object.values(detectionFields).forEach((field) => field.textContent = "0%");
-    updateEmergencyMessage("normal");
+    Object.values(multiclassFields).forEach((field) => field.textContent = "0.00%");
+    Object.values(binaryFields).forEach((field) => field.textContent = "0.00%");
+    binaryEvent.textContent = "NORMAL";
+    multiclassEvent.textContent = "NORMAL";
+    comparisonMulticlassEvent.textContent = "NORMAL";
+    comparisonBinaryEvent.textContent = "NORMAL";
+    comparisonAgreement.textContent = "YES";
 }
 
 async function updateDetection() {
     try {
         const response = await fetch("/detection");
         const detection = await response.json();
-        currentEvent.textContent = detection.event.toUpperCase();
-        detectionIndicator.className = `indicator ${detection.event === "normal" ? "normal" : "alert"}`;
-        updateEmergencyMessage(detection.event);
-        Object.entries(detectionFields).forEach(([name, field]) => {
-            field.textContent = `${(detection[name] * 100).toFixed(0)}%`;
+        Object.entries(multiclassFields).forEach(([name, field]) => {
+            field.textContent = formatPercentage(detection.multiclass[name]);
         });
+        Object.entries(binaryFields).forEach(([name, field]) => {
+            field.textContent = formatPercentage(detection.binary[name]);
+        });
+        binaryEvent.textContent = detection.binary.event.toUpperCase();
+        multiclassEvent.textContent = detection.multiclass.event.toUpperCase();
+        comparisonMulticlassEvent.textContent = detection.comparison.multiclass_event.toUpperCase();
+        comparisonBinaryEvent.textContent = detection.comparison.binary_event.toUpperCase();
+        comparisonAgreement.textContent = detection.comparison.agreement ? "YES" : "NO";
+        const hasAlert = detection.multiclass.event !== "normal" || detection.binary.event !== "normal";
+        detectionIndicator.className = `indicator ${hasAlert ? "alert" : "normal"}`;
     } catch (error) {
         console.error("Detection request failed:", error);
     }

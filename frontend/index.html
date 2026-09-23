@@ -83,11 +83,24 @@
                     </div>
 
                     <div class="detection-details">
-                        <p class="detection-event">Current Event: <strong id="currentEvent">NORMAL</strong></p>
-                        <p>Normal: <span id="normalProbability">0%</span></p>
-                        <p>Fire: <span id="fireProbability">0%</span></p>
-                        <p>Violence: <span id="violenceProbability">0%</span></p>
-                        <p>Accident: <span id="accidentProbability">0%</span></p>
+                        <p class="detection-event"><strong>MULTICLASS MODEL</strong></p>
+                        <p>Normal: <span id="multiclassNormalProbability">0.00%</span></p>
+                        <p>Fire: <span id="multiclassFireProbability">0.00%</span></p>
+                        <p>Accident: <span id="multiclassAccidentProbability">0.00%</span></p>
+                        <p>Violence: <span id="multiclassViolenceProbability">0.00%</span></p>
+
+                        <p class="detection-event"><strong>BINARY MODELS</strong></p>
+                        <p>Fire: <span id="binaryFireProbability">0.00%</span></p>
+                        <p>Violence: <span id="binaryViolenceProbability">0.00%</span></p>
+                        <p>Accident: <span id="binaryAccidentProbability">0.00%</span></p>
+
+                        <p class="detection-event">Binary Event: <strong id="binaryEvent">NORMAL</strong></p>
+                        <p class="detection-event">Multiclass Event: <strong id="multiclassEvent">NORMAL</strong></p>
+
+                        <p class="detection-event"><strong>COMPARISON</strong></p>
+                        <p>Multiclass: <span id="comparisonMulticlassEvent">NORMAL</span></p>
+                        <p>Binary: <span id="comparisonBinaryEvent">NORMAL</span></p>
+                        <p>Agreement: <span id="comparisonAgreement">YES</span></p>
                     </div>
 
                 </div>

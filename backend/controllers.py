@@ -9,7 +9,7 @@ from ml.detection import load_models, predict_rgb_array
 
 camera = None
 latest_frame = None
-latest_detection = {"normal": 0, "fire": 0, "accident": 0, "violence": 0, "event": "normal"}
+latest_detection = None
 last_detection_time = 0.0
 model_cache = None
 camera_lock = threading.Lock()
@@ -17,7 +17,26 @@ detection_lock = threading.Lock()
 
 
 def _normal_detection():
-    return {"normal": 0, "fire": 0, "accident": 0, "violence": 0, "event": "normal"}
+    return {
+        "multiclass": {
+            "normal": 0,
+            "fire": 0,
+            "accident": 0,
+            "violence": 0,
+            "event": "normal",
+        },
+        "binary": {
+            "fire": 0,
+            "violence": 0,
+            "accident": 0,
+            "event": "normal",
+        },
+        "comparison": {
+            "multiclass_event": "normal",
+            "binary_event": "normal",
+            "agreement": True,
+        },
+    }
 
 
 def start_camera():
